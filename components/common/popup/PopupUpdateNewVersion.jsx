@@ -1,5 +1,5 @@
 import { Lexend_Deca } from "@next/font/google";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { PiSparkleFill } from "react-icons/pi";
 import { useDispatch } from "react-redux";
 import { Add as IconClose } from "iconsax-react";
@@ -19,13 +19,13 @@ const PopupUpdateNewVersion = ({ version }) => {
     const { version_current, version_new } = version ?? {};
     const [percentUpdate, setPercentUpdate] = useState(0);
     const [isUpdate, setIsUpdate] = useState(false);
-    const [isProgressPaused, setIsProgressPaused] = useState(false);
     const [isComplete, setIsComplete] = useState(false);
+    const [canRetry, setCanRetry] = useState(false);
+    const isPausedRef = useRef(false); //state  ngưng lại để call api updateNewVersion
 
     const dispatch = useDispatch();
     const queryClient = useQueryClient();
     const showToat = useToast();
-    let percentUpdateTemp = 0;
 
     const updateNewVersion = useMutation({
         mutationFn: () => {
@@ -35,51 +35,36 @@ const PopupUpdateNewVersion = ({ version }) => {
         retryDelay: 1000,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["versionApplication"] });
-            setIsProgressPaused(false)
+            // isPausedRef.current = false;
+
+            //test trường hợp fail người dùng cập nhật lại
+            isPausedRef.current = true;
+            setCanRetry(true); // cho phép hiện nút retry
         },
         onError: () => {
+            isPausedRef.current = true;
             showToat("error", "Vui lòng thử cập nhật lại");
         },
     });
 
     const handleUpdateNewVersion = () => {
         setIsUpdate(true);
-        // updateNewVersion.mutate();
-        // const interval = setInterval(() => {
-        //     percentUpdateTemp += 5;
-
-        //     setPercentUpdate(percentUpdateTemp);
-        //     updateNewVersion.mutate();
-
-        //     if (percentUpdateTemp === 100) {
-        //         clearInterval(interval);
-        //         setTimeout(() => {
-        //             dispatch({
-        //                 type: "statePopupGlobal",
-        //                 payload: {
-        //                     open: false,
-        //                 },
-        //             });
-        //             showToat("success", "Cập nhật phiên bản thành công ");
-        //         }, 700);
-        //     }
-
-        // }, 400);
     };
 
     useEffect(() => {
         if (!isUpdate) return;
-
+        let percentUpdateTemp = 0;
         const interval = setInterval(() => {
-            // không tăng nếu API lỗi 
-            if (percentUpdateTemp >= 75 && isProgressPaused) return;
+            // không tăng nếu API lỗi
+            if (percentUpdateTemp >= 75 && isPausedRef.current) return;
 
             percentUpdateTemp += 5;
             setPercentUpdate(percentUpdateTemp);
 
             //load 75% thì gọi api
             if (percentUpdateTemp === 75) {
-                setIsProgressPaused(true)
+                // setIsProgressPaused(true)
+                isPausedRef.current = true;
                 updateNewVersion.mutate();
             }
 
@@ -91,9 +76,10 @@ const PopupUpdateNewVersion = ({ version }) => {
         }, 400);
 
         return () => clearInterval(interval);
-    }, [isUpdate])
+    }, [isUpdate]);
 
     useEffect(() => {
+        // tự động tắt popup khi hoàn thành cập nhật
         if (isComplete) {
             setTimeout(() => {
                 dispatch({
@@ -104,7 +90,6 @@ const PopupUpdateNewVersion = ({ version }) => {
             }, 700);
         }
     }, [isComplete]);
-
 
     return (
         <div className="">
@@ -166,12 +151,24 @@ const PopupUpdateNewVersion = ({ version }) => {
                 <button
                     className={twMerge(
                         "rounded-lg text-white bg-background-blue-4 py-[10px] px-[18px] w-fit border border-transparent transition-all duration-200 text-base font-normal",
-                        isUpdate
+                        isUpdate && !canRetry
                             ? "cursor-not-allowed disabled:hover:opacity-100 disabled:bg-gray-500/20 disabled:text-white disabled:border-transparent disabled:cursor-not-allowed disabled:pointer-events-auto"
                             : "hover:bg-white hover:text-background-blue-4 hover:border-background-blue-4 "
                     )}
-                    onClick={() => handleUpdateNewVersion()}
-                    disabled={isUpdate}
+                    onClick={() => {
+
+                        // handleUpdateNewVersion()
+                        if (canRetry) {
+                            // Retry cập nhật
+                            setCanRetry(false);
+                            updateNewVersion.mutate();
+                        } else {
+                            handleUpdateNewVersion();
+                        }
+
+                    }}
+                    // disabled={isUpdate}
+                    disabled={isUpdate && !canRetry}
                 >
                     Cập nhật ngay
                 </button>

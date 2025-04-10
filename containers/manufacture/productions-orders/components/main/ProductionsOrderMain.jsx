@@ -1027,7 +1027,7 @@ const ProductionsOrderMain = ({ dataLang, typeScreen }) => {
         }
     };
 
-    // const { data: version, isLoading: isLoadingVersion } = useVersionApplication()
+    const { data: version, isLoading: isLoadingVersion } = useVersionApplication()
 
 
     //phần dropdown hoàn thành công đoạn
@@ -1058,20 +1058,20 @@ const ProductionsOrderMain = ({ dataLang, typeScreen }) => {
                     allowOutsideClick: false,
                     allowEscape: false,
                     children: (
-                        <PopupRequestUpdateVersion>
-                            <p className="text-start xlg:text-2xl text-xl leading-[32px] font-semibold text-[#141522]">
-                                Theo dõi chặt{" "}
-                                <span className="text-[#0375F3]">
-                                    từng bước – từ bán thành phẩm
-                                </span>{" "}
-                                đến thành phẩm cuối cùng
-                            </p>
-                        </PopupRequestUpdateVersion>
-                        // <>
-                        //     {!isLoadingVersion && <>
-                        //         <PopupUpdateNewVersion version={version} />
-                        //     </>}
-                        // </>
+                        // <PopupRequestUpdateVersion>
+                        //     <p className="text-start xlg:text-2xl text-xl leading-[32px] font-semibold text-[#141522]">
+                        //         Theo dõi chặt{" "}
+                        //         <span className="text-[#0375F3]">
+                        //             từng bước – từ bán thành phẩm
+                        //         </span>{" "}
+                        //         đến thành phẩm cuối cùng
+                        //     </p>
+                        // </PopupRequestUpdateVersion>
+                        <>
+                            {!isLoadingVersion && <>
+                                <PopupUpdateNewVersion version={version} />
+                            </>}
+                        </>
                     ),
                 },
             });
