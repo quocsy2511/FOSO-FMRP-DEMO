@@ -126,7 +126,10 @@ const PopupPurchaseBeta = ({
       formData.append("pPlan_id", dataTable.listDataRight.idCommand);
       const { isSuccess, message, data } =
         await apiMaterialsPlanning.apiKeepItemsWarehouses(formData);
+
+
       const newData = data?.items?.map((e) => {
+
         return {
           id: uuidv4(),
           idParent: e?.id,
@@ -144,14 +147,17 @@ const PopupPurchaseBeta = ({
           // sl còn lại
           quantityRest: formatNumber(e?.quantity_rest),
           // sl đã mua
-          quantityPurchased: e?.quantity_purchase,
+          quantityPurchased: formatNumber(e?.quantity_purchase),
           quantity:
-            formatNumber(e?.quantity_rest - e?.quantity_purchase) > 0
-              ? formatNumber(e?.quantity_rest - e?.quantity_purchase)
+            (+e?.quantity_rest - +e?.quantity_purchase) > 0
+              ? formatNumber(+e?.quantity_rest - +e?.quantity_purchase)
               : "",
+
           itemVariationOptionValueId: e?.item_variation_option_value_id,
         };
       });
+
+
       form.setValue("arrayItem", newData);
       form.setValue("idBranch", data?.branch_id);
       queryState({ onFetching: false });
@@ -175,7 +181,7 @@ const PopupPurchaseBeta = ({
   });
 
   const onSubmit = async (value) => {
-    console.log('value', value);
+
 
     if (value.arrayItem.length == 0) {
       return shhowToat("error", dataLang?.materials_planning_no_items_purchase || "materials_planning_no_items_purchase");
@@ -548,6 +554,8 @@ const PopupPurchaseBeta = ({
                             },
                             validate: {
                               fn: (value) => {
+
+
                                 try {
                                   let mss = "";
                                   if (value == null) {
@@ -560,6 +568,7 @@ const PopupPurchaseBeta = ({
                                       dataLang?.materials_planning_must_be_greater ||
                                       "materials_planning_must_be_greater";
                                   }
+
                                   return mss || true;
                                 } catch (error) {
                                   throw error;
@@ -568,6 +577,7 @@ const PopupPurchaseBeta = ({
                             },
                           }}
                           render={({ field, fieldState }) => {
+
                             return (
                               <duv className="flex flex-col items-center justify-center">
                                 <InPutNumericFormat

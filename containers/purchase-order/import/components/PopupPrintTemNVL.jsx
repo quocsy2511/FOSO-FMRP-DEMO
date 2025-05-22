@@ -271,14 +271,14 @@ const parseDate = (dateStr) => {
                   STT
                 </ColumnTable>
                 <ColumnTable
-                  colSpan={5}
+                  colSpan={7}
                   textAlign={"start"}
                   className={`border-none  normal-case leading-2 text-typo-gray-1 std:!text-[13px] xl:text-[11px]`}
                 >
                   Sản Phẩm
                 </ColumnTable>
                 <ColumnTable
-                  colSpan={5}
+                  colSpan={3}
                   textAlign={"center"}
                   className={`px-0 border-none normal-case leading-2 text-typo-gray-1 std:!text-[13px] xl:text-[11px]`}
                 >
@@ -312,7 +312,7 @@ const parseDate = (dateStr) => {
                       >
                         {index + 1}
                       </RowItemTable>
-                      <RowItemTable colSpan={5} textAlign={"start"}>
+                      <RowItemTable colSpan={7} textAlign={"start"}>
                         <Cardtable
                           lot={item?.lot}
                           name={item?.item?.item_name}
@@ -322,10 +322,12 @@ const parseDate = (dateStr) => {
                           date={parseDate(item?.expiration_date)}
                           variation={item?.product_variation}
                           serial={item?.serial}
+                          warehouse_name={item?.warehouse_name}
+                          location_name={item?.location_name}
                         />
                       </RowItemTable>
 
-                      <RowItemTable colSpan={5} textAlign={"center"}>
+                      <RowItemTable colSpan={3} textAlign={"center"}>
                         <div className="w-full items-center flex justify-center">
                           <InputNumberCustom
                             state={itemQuantities[item?.id] || 1}

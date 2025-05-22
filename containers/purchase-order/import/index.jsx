@@ -435,7 +435,7 @@ const PurchaseImport = (props) => {
                             <SearchComponent
                                 colSpan={1}
                                 dataLang={dataLang}
-                                placeholder={dataLang?.search_production_order_code}
+                                // placeholder={dataLang?.search_production_order_code}
                                 onChange={_HandleOnChangeKeySearch.bind(this)}
                             />
                             <DateToDateComponent

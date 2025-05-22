@@ -262,14 +262,14 @@ const PopupPrintTemProduct = ({ dataItem, idManufacture }) => {
                                     STT
                                 </ColumnTable>
                                 <ColumnTable
-                                    colSpan={5}
+                                    colSpan={7}
                                     textAlign={"start"}
                                     className={`border-none  normal-case leading-2 text-typo-gray-1 std:!text-[13px] xl:text-[11px]`}
                                 >
                                     Thành Phẩm
                                 </ColumnTable>
                                 <ColumnTable
-                                    colSpan={5}
+                                    colSpan={3}
                                     textAlign={"center"}
                                     className={`px-0 border-none normal-case leading-2 text-typo-gray-1 std:!text-[13px] xl:text-[11px]`}
                                 >
@@ -309,7 +309,7 @@ const PopupPrintTemProduct = ({ dataItem, idManufacture }) => {
                                                 {index + 1}
                                             </RowItemTable>
                                             <RowItemTable
-                                                colSpan={5}
+                                                colSpan={7}
                                                 textAlign={"start"}
                                             // textSize={`"!text-xs"`}
                                             >
@@ -324,11 +324,13 @@ const PopupPrintTemProduct = ({ dataItem, idManufacture }) => {
                                                     date={item?.expiration_date}
                                                     variation={item?.item_variation}
                                                     serial={item?.serial}
+                                                    warehouse_name={item?.warehouse_name}
+                                                    location_name={item?.location_name}
                                                 />
                                             </RowItemTable>
 
                                             <RowItemTable
-                                                colSpan={5}
+                                                colSpan={3}
                                                 textAlign={"center"}
                                             // textSize={`"!text-sm"`}
                                             // className="font-semibold  leading-2 text-typo-black-1 std:text-[12px] xl:text-[11px]"

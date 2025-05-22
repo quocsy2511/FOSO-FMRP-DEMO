@@ -16,8 +16,9 @@ const Cardtable = ({
     classNameContent = "",
     serial,
     lot,
+    warehouse_name,
+    location_name
 }) => {
-
     //xứ lý cho card table print tem 
     const [dataMaterialExpiry, setDataMaterialExpiry] = useState({});
     const [dataProductExpiry, setDataProductExpiry] = useState({});
@@ -61,6 +62,11 @@ const Cardtable = ({
                 <p className="xlg:text-[10px] xl:text-[8px] text-[6px] font-normal text-typo-gray-2">
                     {variation || "(none)"}
                 </p>
+                {warehouse_name && location_name && (
+                    <p className="xlg:text-[10px] xl:text-[8px] text-[6px] font-normal text-typo-gray-2">
+                        {warehouse_name} - {location_name}
+                    </p>
+                )}
                 {code && (
                     <p className="xlg:text-[10px] xl:text-[8px] text-[6px] font-normal text-typo-blue-2">
                         {code}
